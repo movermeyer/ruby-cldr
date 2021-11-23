@@ -132,15 +132,15 @@ module Cldr
       end
 
       def locales(locale, component, options)
-        locale = to_i18n(locale)
+        locale = to_i18n(locale).to_s
 
         locales = if options[:merge]
           defined_parents = Cldr::Export::Data::ParentLocales.new
 
           ancestry = [locale]
           loop do
-            if defined_parents[from_i18n(ancestry.last)]
-              ancestry << to_i18n(defined_parents[from_i18n(ancestry.last)])
+            if defined_parents[ancestry.last]
+              ancestry << defined_parents[ancestry.last]
             elsif I18n::Locale::Tag.tag(ancestry.last).self_and_parents.count > 1
               ancestry << I18n::Locale::Tag.tag(ancestry.last).self_and_parents.last.to_sym
             else
